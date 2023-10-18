@@ -77,7 +77,6 @@ exports.createProduct = asyncErrorHandler(async (req, res, next) => {
     }
 
     const imagesLink = [];
-
     for (let i = 0; i < images.length; i++) {
         const result = await cloudinary.v2.uploader.upload(images[i], {
             folder: "products",
@@ -92,6 +91,7 @@ exports.createProduct = asyncErrorHandler(async (req, res, next) => {
     const result = await cloudinary.v2.uploader.upload(req.body.logo, {
         folder: "brands",
     });
+
     const brandLogo = {
         public_id: result.public_id,
         url: result.secure_url,
@@ -101,6 +101,7 @@ exports.createProduct = asyncErrorHandler(async (req, res, next) => {
         name: req.body.brandname,
         logo: brandLogo
     }
+
     req.body.images = imagesLink;
     req.body.user = req.user.id;
 
@@ -230,7 +231,7 @@ exports.createProductReview = asyncErrorHandler(async (req, res, next) => {
 
     if (isReviewed) {
 
-        product.reviews.forEach((rev) => { 
+        product.reviews.forEach((rev) => {
             if (rev.user.toString() === req.user._id.toString())
                 (rev.rating = rating, rev.comment = comment);
         });
